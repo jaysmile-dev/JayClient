@@ -73,9 +73,6 @@ class JayMixin2 {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         var color = Color.WHITE;
-        float red = color.getRed() / 255F;
-        float green = color.getGreen() / 255F;
-        float blue = color.getBlue() / 255F;
 
         drawQuads(matrixStack, 0, 6, MinecraftClient.getInstance().textRenderer.getWidth(version) + 76, 17, 228 / 255F,
                 77 / 255F, 77 / 255F, 0.5F);

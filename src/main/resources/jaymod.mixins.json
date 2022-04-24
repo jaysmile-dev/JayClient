@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.miao.jaymod.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "ButtonMixin",
+    "ButtonMixin2",
+    "JayMixin",
+    "JayMixin2",
+    "CrackedNameMixin",
+    "LoginMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

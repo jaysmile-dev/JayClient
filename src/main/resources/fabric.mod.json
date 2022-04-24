@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "jaymod",
+  "version": "${version}",
+
+  "name": "Jay Mod",
+  "description": "Jaysmile´s personal Mod",
+  "authors": [
+    "jaysmile"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/jaymod/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.miao.jaymod.JayMod"
+    ]
+  },
+  "mixins": [
+    "jaymod.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

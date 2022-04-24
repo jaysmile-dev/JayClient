@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClickableWidget.class)
 public abstract class ButtonMixin {
+
+    @Shadow public abstract int getWidth();
 
     private @Unique
     float alpha = 1;
@@ -30,22 +33,12 @@ public abstract class ButtonMixin {
 
     @Redirect(method = "renderButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ClickableWidget;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
     private void onRender(ClickableWidget instance, MatrixStack matrixStack, int i, int j, int l, int m, int n, int q) {
-        DrawableHelper.fill(matrixStack, instance.x, instance.y, instance.x + instance.getWidth(), instance.y + instance.getHeight(), 0x8f3333);
-        instance.setAlpha(alpha);
-
-
-        if (instance.isHovered() && alpha < 1)
-            alpha += 0.001F;
-        else if (!instance.isHovered() && alpha > 0)
-            alpha -= 0.001F;
+        DrawableHelper.fill(new MatrixStack(), instance.x, instance.y, instance.x + instance.getWidth(), instance.y + instance.getHeight(), 0xff00ce);
 
 
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ClickableWidget;isHovered()Z"), method = "renderButton")
-    private void on(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 
-    }
 
 
 }

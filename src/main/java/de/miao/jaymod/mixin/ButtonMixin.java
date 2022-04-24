@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClickableWidget.class)
 public abstract class ButtonMixin {
 
-    private static @Unique
+    private @Unique
     float alpha = 1;
 
     private static final @Unique
@@ -30,14 +30,14 @@ public abstract class ButtonMixin {
 
     @Redirect(method = "renderButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ClickableWidget;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
     private void onRender(ClickableWidget instance, MatrixStack matrixStack, int i, int j, int l, int m, int n, int q) {
-        DrawableHelper.fill(matrixStack, 10, 10, 10, 10, 0x8f3333);
+        DrawableHelper.fill(matrixStack, instance.x, instance.y, instance.x + instance.getWidth(), instance.y + instance.getHeight(), 0x8f3333);
         instance.setAlpha(alpha);
 
 
         if (instance.isHovered() && alpha < 1)
-            alpha += 0.1F;
+            alpha += 0.001F;
         else if (!instance.isHovered() && alpha > 0)
-            alpha -= 0.1F;
+            alpha -= 0.001F;
 
 
     }

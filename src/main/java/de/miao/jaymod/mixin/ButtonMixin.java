@@ -49,16 +49,21 @@ public abstract class ButtonMixin {
     }
 
     private @Unique
-    int myAlpha = 100;
+    float myAlpha = 100F;
+
+    private @Unique
+    final
+    long lastMillis = System.currentTimeMillis();
 
     @Inject(at = @At(value = "HEAD"), method = "renderButton")
     private void on(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         DrawableHelper.fill(matrices, x, y, x + width, y + height, new Color(191, 52, 52, myAlpha).getRGB());
-
-        if (isHovered() && myAlpha < 160F)
-            myAlpha += 5;
-        if (!isHovered() && myAlpha > 100F)
-            myAlpha -= 5;
+        if (System.currentTimeMillis() - lastMillis == 1) {
+            if (isHovered() && myAlpha < 160F)
+                myAlpha += 5F;
+            if (!isHovered() && myAlpha > 100F)
+                myAlpha -= 5F;
+        }
     }
 }
 

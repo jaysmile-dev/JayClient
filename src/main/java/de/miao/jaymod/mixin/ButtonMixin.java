@@ -39,31 +39,39 @@ public abstract class ButtonMixin {
     @Shadow
     public abstract boolean isHovered();
 
-    private @Unique
-    float alpha = 1;
+    @Shadow
+    public abstract void setMessage(Text message);
 
+    @Shadow
+    protected float alpha;
 
     @Redirect(method = "renderButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ClickableWidget;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
     private void onRender(ClickableWidget instance, MatrixStack matrixStack, int i, int j, int l, int m, int n, int q) {
 
     }
 
-    private @Unique
-    float myAlpha = 100F;
+    @Unique
+    private long lastMillis = System.currentTimeMillis();
 
-    private @Unique
-    final
-    long lastMillis = System.currentTimeMillis();
+    @Unique
+    private boolean hovered = isHovered();
+
 
     @Inject(at = @At(value = "HEAD"), method = "renderButton")
     private void on(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        DrawableHelper.fill(matrices, x, y, x + width, y + height, new Color(191, 52, 52, myAlpha).getRGB());
-        if (System.currentTimeMillis() - lastMillis == 1) {
-            if (isHovered() && myAlpha < 160F)
-                myAlpha += 5F;
-            if (!isHovered() && myAlpha > 100F)
-                myAlpha -= 5F;
+
+        if (isHovered() && !hovered || !isHovered() && hovered) {
+            lastMillis = System.currentTimeMillis();
+            hovered = isHovered();
         }
+
+
+        DrawableHelper.fill(matrices, x, y, x + width, y + height,
+
+                new Color(191, 52, 52,
+                        (isHovered() ?
+                                ((int) (160 - Math.min(System.currentTimeMillis() - lastMillis, 500) / 500F * 60))
+                                : (int) (Math.min(System.currentTimeMillis() - lastMillis, 500) / 500F * 60 + 100))).getRGB());
     }
 }
 
@@ -74,12 +82,10 @@ class ButtonMixin2 extends Screen {
         super(title);
     }
 
-    int l = this.height / 4 + 89;
+    @Inject(at = @At(value = "HEAD", ordinal = 0), method = "initWidgetsNormal")
+    private void modify(int y, int spacingY, CallbackInfo ci) {
 
-    @Inject(at = @At("TAIL"), method = "initWidgetsNormal")
-    private void modify(CallbackInfo ci) {
-
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, l, 200, 20, Text.of("Cracked Login"), button -> this.client.setScreen(new LoginScreen(this, this::addEntry))));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, (int)(y - spacingY) , 200, 20, Text.of("Cracked Login"), button -> this.client.setScreen(new LoginScreen(this, this::addEntry))));
 
     }
 
